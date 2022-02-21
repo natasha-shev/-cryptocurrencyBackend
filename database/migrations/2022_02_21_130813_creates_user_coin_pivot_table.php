@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatesCoinUserPivotTable extends Migration
+class CreatesUserCoinPivotTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreatesCoinUserPivotTable extends Migration
      */
     public function up()
     {
-        Schema::create('coin_user', function (Blueprint $table) {
+        Schema::create('user_coin', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('coin_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('coin_id');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreatesCoinUserPivotTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('coin_user');
+        Schema::dropIfExists('user_coin');
     }
 }
