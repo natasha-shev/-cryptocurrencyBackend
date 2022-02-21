@@ -19,7 +19,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             $errors = $validator->errors();
-            return \response()->json(['error' => $errors], 400);
+            return response()->json(['error' => $errors], 400);
         }
 
         if ($validator->passes()) {
@@ -29,7 +29,7 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password)
             ]);
             $token = $user->createToken('auth_token')->plainTextToken;
-            return \response()->json([
+            return response()->json([
                 'access_token' => $token,
                 'token_type' => 'Bearer'
             ]);
@@ -41,7 +41,7 @@ class AuthController extends Controller
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'message' => 'Invalid login details'
-            ], 401);
+            ], 400);
         }
         $user = User::where('email', $request['email'])->firstOrFail();
         $token = $user->createToken('auth_token')->plainTextToken;
