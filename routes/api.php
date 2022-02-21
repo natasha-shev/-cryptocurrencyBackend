@@ -21,6 +21,6 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
 });
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
+
+Route::post('favourite/{coin}', [\App\Http\Controllers\FavCoinsController::class, 'store']);
+Route::get('/fav', [App\Http\Controllers\FavCoinsController::class, 'index']);

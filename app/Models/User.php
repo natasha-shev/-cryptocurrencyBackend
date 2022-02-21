@@ -43,6 +43,6 @@ class User extends Authenticatable
     ];
 
     public function coins(){
-        return $this->hasMany(Coin::class);
+        return $this->belongsToMany(Coin::class, 'user_coin');
     }
 }
