@@ -17,7 +17,7 @@ class AddColumnsToCoinsTable extends Migration
             $table->string('name');
             $table->string('full_name');
             $table->text('icon_url');
-            $table->unsignedBigInteger('price_usd');
+            $table->float('price_usd');
             $table->text('additional_data');
         });
     }
