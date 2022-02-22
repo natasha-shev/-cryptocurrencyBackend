@@ -14,7 +14,6 @@ class Coin extends Model
         'full_name',
         'icon_url',
         'price_usd',
-        'additional_data'
     ];
 
     public function users(){
