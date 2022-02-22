@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Coin;
 use Illuminate\Console\Command;
 
-class updateCoins extends Command
+class updateCoinsCommand extends Command
 {
     /**
      * The name and signature of the console command.
