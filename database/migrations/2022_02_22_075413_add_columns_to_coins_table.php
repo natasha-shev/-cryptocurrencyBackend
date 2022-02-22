@@ -21,19 +21,30 @@ class AddColumnsToCoinsTable extends Migration
         });
     }
 
+    function dropColumnIfExists($column)
+    {
+        if (Schema::hasColumn('coins', $column))
+        {
+            Schema::table('coins', function (Blueprint $table) use ($column) {
+                $table->dropColumn($column);
+            });
+        }
+
+    }
+
     /**
      * Reverse the migrations.
      *
      * @return void
      */
+
     public function down()
     {
         Schema::table('coins', function (Blueprint $table) {
-            $table->dropColumn('name');
-            $table->dropColumn('full_name');
-            $table->dropColumn('icon_url');
-            $table->dropColumn('price_usd');
-            $table->dropColumn('additional_data');
+            $table->dropColumnIfExists('name');
+            $table->dropColumnIfExists('full_name');
+            $table->dropColumnIfExists('icon_url');
+            $table->dropColumnIfExists('price_usd');
         });
     }
 }
