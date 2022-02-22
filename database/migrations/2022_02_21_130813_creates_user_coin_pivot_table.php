@@ -14,9 +14,9 @@ class CreatesUserCoinPivotTable extends Migration
     public function up()
     {
         Schema::create('user_coin', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('coin_id');
+            $table->primary(['user_id','coin_id']);
             $table->timestamps();
         });
     }
