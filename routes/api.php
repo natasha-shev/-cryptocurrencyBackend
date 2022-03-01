@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
 });
 
-Route::post('favourite/{coin}', [\App\Http\Controllers\FavCoinsController::class, 'store']);
+Route::post('favourites', [\App\Http\Controllers\FavCoinsController::class, 'store']);
 Route::get('/fav', [App\Http\Controllers\FavCoinsController::class, 'index']);
 
 Route::get('/coins', [\App\Http\Controllers\CoinsController::class, 'index']);
