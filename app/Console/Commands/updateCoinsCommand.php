@@ -39,23 +39,15 @@ class updateCoinsCommand extends Command
      */
     public function handle()
     {
-        $url = 'https://min-api.cryptocompare.com/data/top/totaltoptiervolfull?limit=50&tsym=USD';
-        $data = Http::get($url)->json()["Data"];
-        foreach ($data as $value) {
-            if (!isset($value["RAW"]["USD"]["PRICE"])) {
+        $names = implode(',', Coin::pluck('name')->toArray());
+        $url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms='.$names.'&tsyms=USD,EUR';
+        $data = Http::get($url)->json();
+        foreach ($data as $key => $value) {
+            if (!isset($value["USD"])) {
                 continue;
             }
-            $coin = Coin::where('name', $value["CoinInfo"]["Name"])->first();
-            if (!$coin) {
-                Coin::create([
-                    'name' => $value["CoinInfo"]["Name"],
-                    'full_name' => $value["CoinInfo"]["FullName"],
-                    'icon_url' => 'https://www.cryptocompare.com/' . $value["CoinInfo"]["ImageUrl"],
-                    'price_usd' => $value["RAW"]["USD"]["PRICE"],
-                ]);
-            } else {
-                $coin->update(['price_usd' => $value["RAW"]["USD"]["PRICE"]]);
-            }
+            $coin = Coin::where('name', $key)->first();
+            $coin->update(['price_usd' => $value["USD"]]);
         }
     }
 }
