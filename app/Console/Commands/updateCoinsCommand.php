@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Coin;
+use App\Models\PriceHistory;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -48,6 +49,10 @@ class updateCoinsCommand extends Command
             }
             $coin = Coin::where('name', $key)->first();
             $coin->update(['price_usd' => $value["USD"]]);
+            PriceHistory::create([
+                'coin_id' => $coin->id,
+                'price_usd' => $value["USD"]
+                ]);
         }
     }
 }
