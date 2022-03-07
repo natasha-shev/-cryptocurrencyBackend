@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FavCoinsController;
+use App\Http\Controllers\CoinsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +22,10 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::post('favourites', [FavCoinsController::class, 'store']);
+    Route::delete('favourites/{coin}', [FavCoinsController::class, 'delete']);
+    //unused
+    Route::get('/fav', [FavCoinsController::class, 'index']);
 });
 
-Route::post('favourites', [\App\Http\Controllers\FavCoinsController::class, 'store']);
-Route::get('/fav', [App\Http\Controllers\FavCoinsController::class, 'index']);
-
-Route::get('/coins', [\App\Http\Controllers\CoinsController::class, 'index']);
+Route::get('/coins', [CoinsController::class, 'index']);
