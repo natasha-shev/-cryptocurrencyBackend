@@ -9,6 +9,9 @@ class Coin extends Model
 {
     use HasFactory;
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'name',
         'full_name',
@@ -16,7 +19,15 @@ class Coin extends Model
         'price_usd',
     ];
 
+    /**
+     * @var string
+     */
+    protected $primaryKey = 'id';
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function users(){
-        return $this->belongsToMany(User::class, 'user_coin');
+        return $this->belongsToMany(User::class, 'user_coin', 'coin_id');
     }
 }

@@ -34,6 +34,11 @@ class User extends Authenticatable
     ];
 
     /**
+     * @var string
+     */
+    protected $primaryKey = 'id';
+
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
@@ -42,7 +47,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function coins(){
-        return $this->belongsToMany(Coin::class, 'user_coin');
+        return $this->belongsToMany(Coin::class, 'user_coin', 'user_id');
     }
 }
