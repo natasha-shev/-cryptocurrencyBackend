@@ -29,3 +29,4 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::get('/coins', [CoinsController::class, 'index']);
+Route::get('/history/{coin}', [CoinsController::class, 'history']);
