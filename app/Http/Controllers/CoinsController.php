@@ -8,20 +8,27 @@ use Illuminate\Support\Facades\DB;
 
 class CoinsController extends Controller
 {
+    /**
+     * @return Coin[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
+     */
     public function index(){
         $thisUserId = auth('sanctum')->id();
         if ($thisUserId) {
-            return Coin::select('*')->select('user_coin.*', 'coins.*')
+            return DB::table('coins')->select('coins.*', 'user_coin.user_id',
+            DB::raw('SUM(IF (action=\'sell\', -1*amount, amount)) as amount'))
                 ->leftJoin('user_coin', function($join) use ($thisUserId) {
-                    $join->on('user_coin.coin_id', '=', 'coins.id')
-                        ->on('user_coin.user_id', '=', DB::raw($thisUserId));
-                })
-                ->get();
+                $join->on('user_coin.coin_id', '=', 'coins.id')
+                    ->on('user_coin.user_id', '=', DB::raw($thisUserId));
+            })->groupBy('coins.id')->get();
         } else {
             return Coin::all();
         }
     }
 
+    /**
+     * @param int $coin_id
+     * @return mixed
+     */
     public function history(int $coin_id)
     {
        return PriceHistory::where('coin_id', $coin_id)->get();
