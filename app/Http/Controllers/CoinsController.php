@@ -14,8 +14,9 @@ class CoinsController extends Controller
     public function index(){
         $thisUserId = auth('sanctum')->id();
         if ($thisUserId) {
-            return DB::table('coins')->select('coins.*', 'user_coin.user_id', 'user_coin.price',
-            DB::raw('SUM(IF (action=\'sell\', -1*amount, amount)) as amount'))
+            return DB::table('coins')->select('coins.*', 'user_coin.user_id',
+            DB::raw('SUM(IF (action=\'sell\', -1*amount, amount)) as amount'),
+            DB::raw('SUM(IF (action=\'sell\', -1*amount*user_coin.price, amount*user_coin.price)) as valuation'))
                 ->leftJoin('user_coin', function($join) use ($thisUserId) {
                 $join->on('user_coin.coin_id', '=', 'coins.id')
                     ->on('user_coin.user_id', '=', DB::raw($thisUserId));
