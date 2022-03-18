@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('favourites', [FavCoinsController::class, 'store']);
     Route::delete('favourites/{coin}', [FavCoinsController::class, 'delete']);
+    Route::get('/total', [FavCoinsController::class, 'total']);
     //unused
     Route::get('/fav', [FavCoinsController::class, 'index']);
 });
