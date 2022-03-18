@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Coin;
 
-use App\Models\PriceHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,22 +28,34 @@ class FavCoinsController extends Controller
             'action' => $request->action]);
     }
 
+    /**
+     * @param int $coin_id
+     * @return mixed
+     */
     public function delete(int $coin_id) {
         $user = auth('sanctum')->user();
         return $user->coins()->detach($coin_id);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Support\Collection
+     */
     public function total(Request $request) {
         $user = auth('sanctum')->user();
-        $coins = $user->coins()->allRelatedIds();
-        return [];
-//          return  PriceHistory::select('*')->whereIn('coin_id', $coins)
-//                ->leftJoin('user_coin', function($join) use ($user) {
-//                    $join->on('coin_id', '=', 'user_coin.coin_id')
-//                        ->on('user_coin.user_id', '=', DB::raw($user->id));
-//                })
-//                ->get();
-
-          // return [smth like 'date', 'total']
+        return DB::table('price_history AS h')
+            ->select(
+                DB::raw('DATE_FORMAT(h.created_at, \'%Y-%m-%d %H:%i\') AS datetime'),
+                DB::raw('(SUM(IF(uc.action = \'buy\', uc.amount, 0)) - SUM(IF(uc.action = \'sell\', uc.amount, 0)))*h.price_usd AS total')
+            )
+            ->leftJoin('user_coin AS uc', function($join) use ($user)
+            {
+                $join->on('uc.coin_id', '=', 'h.coin_id');
+                $join->on('uc.date','<=', 'h.created_at');
+                $join->on('uc.user_id','=',DB::raw($user->id));
+            })
+            ->groupBy('datetime')
+            ->orderBy('datetime')
+            ->get();
     }
 }
