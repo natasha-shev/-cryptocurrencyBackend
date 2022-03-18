@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|void
+     */
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -36,6 +40,10 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(Request $request) {
 
         if (!Auth::attempt($request->only('email', 'password'))) {
@@ -51,8 +59,11 @@ class AuthController extends Controller
         ]);
     }
 
-    public function me(Request $request)
+    /**
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     */
+    public function me()
     {
-        return $request->user();
+        return auth('sanctum')->user();
     }
 }
