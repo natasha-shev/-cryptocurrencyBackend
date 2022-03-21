@@ -52,8 +52,10 @@ class FavCoinsController extends Controller
             {
                 $join->on('uc.coin_id', '=', 'h.coin_id');
                 $join->on('uc.date','<=', 'h.created_at');
-                $join->on('uc.user_id','=',DB::raw($user->id));
+                $join->on('uc.user_id','=', DB::raw($user->id));
+
             })
+            ->whereRaw("h.created_at >= (SELECT MIN(ucc.date) AS minDate FROM user_coin AS ucc WHERE ucc.user_id = {$user->id})")
             ->groupBy('datetime')
             ->orderBy('datetime')
             ->get();
