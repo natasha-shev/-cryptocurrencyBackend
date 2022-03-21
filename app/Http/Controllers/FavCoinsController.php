@@ -60,4 +60,17 @@ class FavCoinsController extends Controller
             ->orderBy('datetime')
             ->get();
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Support\Collection
+     */
+    public function sales(Request $request) {
+        $user = auth('sanctum')->user();
+        return DB::table('user_coin AS uc')
+            ->select('uc.price', 'uc.date', 'uc.amount', 'c.name')
+            ->leftJoin('coins AS c', 'uc.coin_id', '=', 'c.id')
+            ->whereRaw("uc.action = 'sell' AND uc.user_id={$user->id}")
+            ->get();
+    }
 }
