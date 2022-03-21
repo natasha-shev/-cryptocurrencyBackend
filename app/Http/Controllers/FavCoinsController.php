@@ -68,7 +68,7 @@ class FavCoinsController extends Controller
     public function sales(Request $request) {
         $user = auth('sanctum')->user();
         return DB::table('user_coin AS uc')
-            ->select('uc.price', 'uc.date', 'uc.amount', 'c.name')
+            ->select('uc.price', 'uc.date', 'uc.amount', 'c.name', DB::raw('uc.price * uc.amount AS income'))
             ->leftJoin('coins AS c', 'uc.coin_id', '=', 'c.id')
             ->whereRaw("uc.action = 'sell' AND uc.user_id={$user->id}")
             ->get();
