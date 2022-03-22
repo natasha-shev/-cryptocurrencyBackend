@@ -46,7 +46,7 @@ class FavCoinsController extends Controller
         return DB::table('price_history AS h')
             ->select(
                 DB::raw('DATE_FORMAT(h.created_at, \'%Y-%m-%d %H:%i\') AS datetime'),
-                DB::raw('(SUM(IF(uc.action = \'buy\', uc.amount, 0)) - SUM(IF(uc.action = \'sell\', uc.amount, 0)))*h.price_usd AS total')
+                DB::raw('(SUM(IF(uc.action = \'buy\', uc.amount, 0)*h.price_usd) - SUM(IF(uc.action = \'sell\', uc.amount, 0)*h.price_usd)) AS total')
             )
             ->leftJoin('user_coin AS uc', function($join) use ($user)
             {
